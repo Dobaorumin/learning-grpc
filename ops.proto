@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package tangelogames.api.ops;
+
+option csharp_namespace = "Tangelogames.Api.Ops";
+option go_package = "tangelogames/api/ops;opspb";
+option java_multiple_files = true;
+option java_outer_classname = "OpsProto";
+option java_package = "com.tangelogames.api.ops";
+option objc_class_prefix = "TAO";
+option php_namespace = "Tangelogames\\Api\\Ops";
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+service Ops {
+  rpc ServerInfo(ServerInfoRequest) returns (stream ServerInfoResponse);
+  rpc Status(StatusRequest) returns (StatusResponse);
+  rpc Ping(PingRequest) returns (stream PingResponse);
+}
+
+message ServerInfoRequest {
+  google.protobuf.Duration interval = 1;
+}
+
+message ServerInfoResponse {
+  google.protobuf.Timestamp ts = 1;
+  string version = 2;
+  string commit = 3;
+  string hostname = 4;
+}
+
+message StatusRequest {}
+
+message StatusResponse {
+  google.protobuf.Timestamp ts = 1;
+  string version = 2;
+  string commit = 3;
+}
+
+message PingRequest {
+  // Random string which will be replied back
+  string id = 1;
+  // How many pings to send before closing the connection. Zero (0) means ping forever
+  uint64 n = 2;
+}
+
+message PingResponse {
+  string id = 1;
+  uint64 seq = 2;
+  string payload = 3;
+}
